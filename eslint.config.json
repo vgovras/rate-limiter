@@ -1,0 +1,30 @@
+{
+    "env": {
+      "node": true,
+      "commonjs": true,
+      "es2021": true
+    },
+    "extends": [
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 12
+    },
+    "rules": {
+      "no-unused-vars": "warn",
+      "no-console": "off",
+      "strict": ["error", "global"],
+      "no-process-exit": "error",
+      "prefer-const": "error",
+      "no-var": "error",
+      "eqeqeq": ["error", "always"],
+      "no-implicit-globals": "error",
+      "no-trailing-spaces": "error",
+      "no-undef-init": "error",
+      "linebreak-style": ["error", "unix"],
+      "indent": ["error", 2],
+      "quotes": ["error", "single"],
+      "semi": ["error", "always"]
+    }
+  }
+  
