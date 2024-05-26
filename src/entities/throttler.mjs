@@ -1,5 +1,11 @@
+import { Queue } from "./queue.mjs";
+
+/**
+ * @tempalte T
+ */
 export class Throttler {
-  #taskQueue = [];
+  /** @type {Queue<T>} */
+  #queue;
   #timer = null;
   #firstRun = true;
 
@@ -11,6 +17,7 @@ export class Throttler {
   constructor({ timeout = 1000, batchSize = 5 } = {}) {
     this.timeout = timeout;
     this.batchSize = batchSize;
+    this.#queue = new Queue();
   }
 
   /**
@@ -23,7 +30,7 @@ export class Throttler {
   schedule(func, ...args) {
     this.#initializeTimer();
     return new Promise((resolve, reject) => {
-      this.#taskQueue.push(async () => {
+      this.#queue.push(async () => {
         try {
           resolve(await func(...args));
         } catch (err) {
@@ -46,13 +53,13 @@ export class Throttler {
   }
 
   async #processTasks() {
-    const currentBatch = this.#taskQueue.splice(0, this.batchSize)
+    const currentBatch = this.#queue.batch(this.batchSize);
 
     for (const executeTask of currentBatch) {
       await executeTask();
     }
 
-    if (this.#taskQueue.length === 0) {
+    if (this.#queue.length === 0) {
       clearInterval(this.#timer);
       this.#timer = null;
       this.#firstRun = true; 
